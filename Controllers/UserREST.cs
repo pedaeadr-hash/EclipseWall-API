@@ -1,4 +1,5 @@
 using Gen;
+using DtoUser;
 using Microsoft.AspNetCore.Mvc;
 using BCrypt.Net;
 using Microsoft.EntityFrameworkCore;
@@ -42,102 +43,97 @@ namespace Controles
             return tokenHandler.WriteToken(token);
         }
         
-
+        //endpoint in dto
 
         [HttpPost("Create")]
-        public async Task<IActionResult> CreateUser ([FromBody]Usuario us)
+        public async Task<IActionResult> CreateUser ([FromBody]CreateUser cudto)
 
         {
-            if (us == null)
+            if (cudto == null || string.IsNullOrWhiteSpace(cudto.Name) || string.IsNullOrWhiteSpace(cudto.Email) || string.IsNullOrWhiteSpace(cudto.Senha))
             {
-                return BadRequest("Dados inválidos.");
+                return BadRequest("Todos os campos (Nome, Email e Senha) são obrigatórios.");
             }
-           
-            var caixaaltae =us.Email.Trim().ToLower();
-            us.Nome = us.Nome.Trim();
-            us.Senha=us.Senha.Trim();
+
+            cudto.Name=cudto.Name.Trim().ToLower();
+            cudto.Email=cudto.Email.Trim().ToLower();
+            cudto.Senha=cudto.Senha.Trim();
+
+            //TRATAMENTOS
             
-            us.Email=caixaaltae;
-            
-            if (us.Nome.Length > 8)
+            //NameTRATAMENTOS
+            if (cudto.Name.Length > 50)
             {
-                return BadRequest("nome com muitas caracteres max: 8 caracteres");
+                return BadRequest("O nome deve conter entre 3 e 50 caracteres.");
             }
-            if (us.Nome.Length < 3)
+            if (cudto.Name.Length < 3)
             {
-                return BadRequest("nome com poucas caracteres");
-            }
-            if (us.Email.Length > 60)
-            {
-                return BadRequest("Email muito grande");
-            }
-            if (us.Email.Length < 14)
-            {
-                return BadRequest("email minimo de 6 caracteres");
-            }
-            if (us.Email.Length > 60)
-            {
-                return BadRequest("Email muito grande");
-            }
-            if (!caixaaltae.EndsWith("@gmail.com"))
-            {
-                return BadRequest("O email deve conter @gmail.com");
-            }
-            if (us.Senha.Length < 8)
-            {
-                return BadRequest("Senha fraca, a senha deve conter mais de 8 caracteres");
-            }
-            if (us.Senha.Length > 25)
-            {
-                return BadRequest("Senha muito grande");
-            }
-            // Letra maiúscula
-            if (!Regex.IsMatch(us.Senha, "[A-Z]"))
-            {
-                return BadRequest("A senha deve conter pelo menos uma letra maiúscula.");
-            }
-
-            // Letra minúscula
-            if (!Regex.IsMatch(us.Senha, "[a-z]"))
-            {
-                return BadRequest("A senha deve conter pelo menos uma letra minúscula.");
-            }
-
-            // Número
-            if (!Regex.IsMatch(us.Senha, "[0-9]"))
-            {
-                return BadRequest("A senha deve conter pelo menos um número.");
-            }
-
-            // Caractere especial
-            if (!Regex.IsMatch(us.Senha, @"[!@#$%^&*(),.?""':{}|<>_\-+=/\\\[\]]"))
-            {
-                return BadRequest("A senha deve conter pelo menos um caractere especial.");
-            }
-            var verificar = await bank.Usuarios.FirstOrDefaultAsync(x=>x.Email==us.Email);
-            if (verificar != null)
-            {
-                return BadRequest("email ja cadastrado");
+                return BadRequest("O nome deve conter entre 3 e 50 caracteres.");
             }
 
 
 
-            //tratamentos acima
+
+            //EmailTRATAMENTOS
+            if (cudto.Email.Length > 100)
+            {
+                return BadRequest("Por favor, insira um endereço de e-mail válido.");
+            }
+            // Expressão regular padrão para validar o formato de qualquer e-mail
+            string regexEmail = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            if (!Regex.IsMatch(cudto.Email, regexEmail))
+            {
+            return BadRequest("Por favor, insira um endereço de e-mail válido.");
+             
+            }
 
 
-            string Crip = BCrypt.Net.BCrypt.HashPassword(us.Senha);
-            us.Senha=Crip;
-            us.Role=1;
+            //SenhaTRATAMENTOS
+            if (cudto.Senha.Length < 8)
+            {
+                return BadRequest("A senha deve ter no mínimo 8 caracteres.");
+            }
+            if (cudto.Senha.Length > 32)
+            {
+                return BadRequest("A senha deve ter no máximo de 32 caracteres.");
+            }
+            string regexSenha = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,32}$";
+            if (!Regex.IsMatch(cudto.Senha, regexSenha))
+            {
+                return BadRequest("A senha deve conter letras maiúsculas, minúsculas, números e pelo menos um caractere especial.");
+            }
+
+
+
+            //VALIDAREMAILDUPLICADO
+            bool Duplicado = await bank.Usuarios.AnyAsync(x=>x.Email==cudto.Email);
+            if (Duplicado)
+            {
+                return BadRequest("Email já Cadastrado");
+            }
+            //criptar senha
+            string SenhaHash = BCrypt.Net.BCrypt.HashPassword(cudto.Senha);
+
+
+            Usuario us = new Usuario {Nome=cudto.Name,Email=cudto.Email,Senha=SenhaHash,Role=1};
+
             try
             {
-            await bank.Usuarios.AddAsync(us);
-            await bank.SaveChangesAsync();
-            } catch (Exception x)
-            {
-                return StatusCode(500,$"Erro interno: {x.Message}");
-            }
+                await bank.Usuarios.AddAsync(us);
+                await bank.SaveChangesAsync();
+            } 
             
-            return Ok("CADASTRO REALIZADO COM SUCESSO");
+            catch (Exception ex)
+
+            {
+                return StatusCode(500, $"Erro interno ao salvar no banco: {ex.Message}");
+            }
+
+
+
+
+
+
+           return Ok ("Cadastrado com Sucesso.");
         }
 
         [HttpPost("Login")]
