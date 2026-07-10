@@ -26,16 +26,28 @@ namespace ControllersWall
             return Ok ("upload feito com sucesso");
         }
         [HttpGet("wall")]
-        public async Task<IActionResult> extrairwall(int carregar = 1, int limit = 10)
+        public async Task<IActionResult> extrairwall(int carregar = 1, int limit = 10, int ordem = 0)
         {
         int registrosParaPular = (carregar - 1) * limit;
-
-            // Correção: Ordenar ANTES de pular e pegar garante consistência nos dados
-        var lista = await Bank.Wallpapers
+        List<Wallpaper> lista = new List<Wallpaper>();
+        if (ordem == 0)
+            {
+                lista = await Bank.Wallpapers
                                 .OrderBy(x => x.Downloads)
                                 .Skip(registrosParaPular)
                                 .Take(limit)
                                 .ToListAsync();
+            }
+        else
+            {
+                lista = await Bank.Wallpapers
+                                .OrderByDescending(x => x.Downloads)
+                                .Skip(registrosParaPular)
+                                .Take(limit)
+                                .ToListAsync();
+            }    
+        
+        
 
             int countwall = await Bank.Wallpapers.CountAsync();
 

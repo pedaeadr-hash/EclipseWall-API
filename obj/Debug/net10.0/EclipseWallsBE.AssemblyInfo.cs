@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EclipseWallsBE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+25bf9f92d6703042ab576bb26bca56d0329cf810")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a7fbfa41fdbb539cd4b6081b6a85e97af024dc9c")]
 [assembly: System.Reflection.AssemblyProductAttribute("EclipseWallsBE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EclipseWallsBE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
