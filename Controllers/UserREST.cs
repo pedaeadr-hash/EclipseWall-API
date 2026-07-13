@@ -135,6 +135,28 @@ namespace Controles
 
            return Ok ("Cadastrado com Sucesso.");
         }
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login ([FromBody]LoginUser us)
+        {
+            us.Email=us.Email.Trim().ToLower();
+            string EmailRecebido=us.Email;
+            string SenhaRecebida=us.Senha;
+            var UserSelect = bank.Usuarios.FirstOrDefault(x=>x.Email==EmailRecebido);
+            if (UserSelect == null)
+            {
+                return BadRequest("Email ou Senha Incorretas");
+            }
+            //OK ENCONTROU O EMAIL VAMOS VERFICAR SE A SENHA ESTA CERTA
+            bool Senhahash = BCrypt.Net.BCrypt.Verify(SenhaRecebida,UserSelect.Senha);
+            if (!Senhahash)
+            {
+                return BadRequest("Email ou Senha Incorretas");
+            }
+            //senha igual com a do email cadastrado tudo certo vamos dar o token
+            string Token = GerarTokenJwt(EmailRecebido,UserSelect.Role);
+            string Mensagem = "Login Realizado com Sucesso";
+            return Ok (new {Token,Mensagem});
+        }
 
         
 
