@@ -136,24 +136,7 @@ namespace Controles
            return Ok ("Cadastrado com Sucesso.");
         }
 
-        [HttpPost("Login")]
-        public async Task<IActionResult> Login([FromBody]Usuario us)
-        {
-            us.Email=us.Email.ToLower();
-            var encontrado = await bank.Usuarios.FirstOrDefaultAsync(x=>x.Email==us.Email);
-            if (encontrado == null)
-            {
-                return BadRequest ("Email ou senha incorretos");
-            }
-            bool senhahash = BCrypt.Net.BCrypt.Verify(us.Senha, encontrado.Senha);
-            if (!senhahash)
-            {
-                return BadRequest ("Email ou senha incorretos");
-            }
-            var Token = GerarTokenJwt(us.Email,us.Role);
-            string mensagem = "Login Realizado com Sucesso ...";
-            return Ok (new {Token,mensagem});
-        }
+        
 
         [HttpGet("verificartt")]
         [Authorize]
