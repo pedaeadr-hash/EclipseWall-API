@@ -22,7 +22,7 @@ namespace Controles
             bank=banco;
         }
 
-        private string GerarTokenJwt( string email, int role)
+        private string GerarTokenJwt( string email, int role, string name)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("Gj10ksao924kalju2399merda82ikdii2ne");
@@ -33,6 +33,7 @@ namespace Controles
                 {
                     
                     new Claim(ClaimTypes.Email, email),
+                    new Claim(ClaimTypes.Name, name),
                     new Claim(ClaimTypes.Role, role.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddHours(2), // Token expira em 2 horas
@@ -153,7 +154,7 @@ namespace Controles
                 return BadRequest("Email ou Senha Incorretas");
             }
             //senha igual com a do email cadastrado tudo certo vamos dar o token
-            string Token = GerarTokenJwt(EmailRecebido,UserSelect.Role);
+            string Token = GerarTokenJwt(EmailRecebido,UserSelect.Role,UserSelect.Nome);
             string Mensagem = "Login Realizado com Sucesso";
             return Ok (new {Token,Mensagem});
         }
