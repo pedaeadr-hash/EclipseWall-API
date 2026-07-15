@@ -56,6 +56,20 @@ namespace ControllersWall
 
             return Ok(new { lista, limitecarregarmais });
         }
+
+
+
+
+
+
+
+        [HttpGet("categoriasuniq")]
+        public async Task<IActionResult> Unicoscategoria()
+        {
+            var listcategoria = await Bank.Wallpapers.Select(x=>x.Categoria).Distinct().ToListAsync();
+            return Ok(listcategoria);
+        }
+        
     }
 
 }
