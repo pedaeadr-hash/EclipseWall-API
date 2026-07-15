@@ -168,7 +168,8 @@ namespace Controles
             // O .NET extrai automaticamente as informações de dentro do Token recebido no Header
                 var email = User.FindFirst(ClaimTypes.Email)?.Value;
                 var role = User.FindFirst(ClaimTypes.Role)?.Value;
-            return Ok(new {email,role});
+                var nome = User.FindFirst(ClaimTypes.Name)?.Value;
+            return Ok(new {email,role,nome});
         }
     }
         
