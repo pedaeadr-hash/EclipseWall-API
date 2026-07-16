@@ -63,11 +63,33 @@ namespace ControllersWall
 
 
 
+
+
+
+
+
+
         [HttpGet("categoriasuniq")]
         public async Task<IActionResult> Unicoscategoria()
         {
             var listcategoria = await Bank.Wallpapers.Select(x=>x.Categoria).Distinct().ToListAsync();
             return Ok(listcategoria);
+        }
+
+        [HttpGet("SelectCategory")]
+        public async Task<IActionResult> SelectCategory(string categoriarecebida="Anime")
+        {
+            
+            
+            var ListaCategoria = await Bank.Wallpapers.Where(x=>x.Categoria==categoriarecebida).ToListAsync();
+            if (ListaCategoria==null)
+            {
+                return BadRequest("Nada encontrado");
+            }
+            string Mensagem = "Wallpapers Encontrados";
+            
+            
+            return Ok(new {ListaCategoria,Mensagem});
         }
         
     }
