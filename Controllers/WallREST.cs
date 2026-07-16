@@ -26,11 +26,21 @@ namespace ControllersWall
             return Ok ("upload feito com sucesso");
         }
         [HttpGet("wall")]
-        public async Task<IActionResult> extrairwall(int carregar = 1, int limit = 10, int ordem = 0)
+        public async Task<IActionResult> extrairwall(int carregar = 1, int limit = 10, int ordem = 0,string? PorCategoria = "Default")
         {
         int registrosParaPular = (carregar - 1) * limit;
         List<Wallpaper> lista = new List<Wallpaper>();
-        if (ordem == 0)
+        if (PorCategoria != "Default" && ordem==0)
+            {
+                lista = await Bank.Wallpapers
+                                .Where(x=>x.Categoria==PorCategoria)
+                                .OrderBy(x => x.Downloads)
+                                .Skip(registrosParaPular)
+                                .Take(limit)
+                                .ToListAsync();
+                if (lista==null){return BadRequest("categoria vazia");}
+            }
+            if (PorCategoria=="Default" && ordem == 0)
             {
                 lista = await Bank.Wallpapers
                                 .OrderBy(x => x.Downloads)
@@ -38,14 +48,24 @@ namespace ControllersWall
                                 .Take(limit)
                                 .ToListAsync();
             }
-        else
+        if (PorCategoria != "Default" && ordem==1)
+            {
+                lista = await Bank.Wallpapers
+                                .Where(x=>x.Categoria==PorCategoria)
+                                .OrderByDescending(x => x.Downloads)
+                                .Skip(registrosParaPular)
+                                .Take(limit)
+                                .ToListAsync();
+                if (lista==null){return BadRequest("categoria vazia");}                
+            } 
+        if (PorCategoria=="Default" && ordem == 1)
             {
                 lista = await Bank.Wallpapers
                                 .OrderByDescending(x => x.Downloads)
                                 .Skip(registrosParaPular)
                                 .Take(limit)
                                 .ToListAsync();
-            }    
+            }   
         
         
 
@@ -76,21 +96,7 @@ namespace ControllersWall
             return Ok(listcategoria);
         }
 
-        [HttpGet("SelectCategory")]
-        public async Task<IActionResult> SelectCategory(string categoriarecebida="Anime")
-        {
-            
-            
-            var ListaCategoria = await Bank.Wallpapers.Where(x=>x.Categoria==categoriarecebida).ToListAsync();
-            if (ListaCategoria==null)
-            {
-                return BadRequest("Nada encontrado");
-            }
-            string Mensagem = "Wallpapers Encontrados";
-            
-            
-            return Ok(new {ListaCategoria,Mensagem});
-        }
+        
         
     }
 
