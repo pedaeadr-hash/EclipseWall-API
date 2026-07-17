@@ -1,4 +1,5 @@
 using Gen;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace ControllersWall
@@ -13,10 +14,11 @@ namespace ControllersWall
             Bank = db;
         }
 
-        [HttpGet]
+        [HttpGet("VERIFY")]
+        [Authorize(Roles ="777")]
         public async Task<IActionResult> Eyes()
         {
-            return Ok ("funcionando");
+            return Ok ("Prossiga");
         }
         [HttpPost("upwall")]
         public async Task<IActionResult> uploadWall (Wallpaper wall)
