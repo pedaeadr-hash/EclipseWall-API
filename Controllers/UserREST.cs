@@ -113,13 +113,9 @@ namespace Controles
             }
             //criptar senha
             string SenhaHash = BCrypt.Net.BCrypt.HashPassword(cudto.Senha);
-            int role=1;
-            if (cudto.Email == "AdminAdrian@gmail.com")
-            {
-                role=777; //role for admin
-            }
+            
 
-            Usuario us = new Usuario {Nome=cudto.Name,Email=cudto.Email,Senha=SenhaHash,Role=role};
+            Usuario us = new Usuario {Nome=cudto.Name,Email=cudto.Email,Senha=SenhaHash,Role=1};
 
             try
             {
