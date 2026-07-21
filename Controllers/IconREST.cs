@@ -16,11 +16,20 @@ namespace IconUser
         }
 
         [HttpPost("SaveIcon")]
-        public async Task<IActionResult> Teste(IconsUser Iu)
+        public async Task<IActionResult> Teste([FromBody] IconsUser Iu)
         {
-            await Bank.AddAsync(Iu);
-            await Bank.SaveChangesAsync();
-            return Ok("Tudo Certo icon salva no banco de dados");
+    
+            try
+            {
+                await Bank.IconsUsers.AddAsync(Iu);
+                await Bank.SaveChangesAsync();
+                return Ok("Tudo Certo icon salva no banco de dados");
+            }
+            catch (Exception ex)
+            {
+                // Retorna a mensagem real do erro para você ver no console do navegador/Postman
+                return StatusCode(500, new { erro = ex.Message, detalhe = ex.InnerException?.Message });
+            }
         }
-    }
-}
+        }
+        }

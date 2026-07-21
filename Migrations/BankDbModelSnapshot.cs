@@ -44,17 +44,20 @@ namespace EclipseWallsBE.Migrations
 
             modelBuilder.Entity("Gen.IconsUser", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("IdTable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdTable"));
 
                     b.Property<string>("UrlIcon")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdTable");
 
                     b.ToTable("IconsUsers");
                 });

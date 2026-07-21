@@ -5,7 +5,7 @@
 namespace EclipseWallsBE.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstBankCommit : Migration
+    public partial class CriarBancoInicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,20 @@ namespace EclipseWallsBE.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IconsUsers",
+                columns: table => new
+                {
+                    IdTable = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    UrlIcon = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IconsUsers", x => x.IdTable);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Usuarios",
                 columns: table => new
                 {
@@ -32,6 +46,7 @@ namespace EclipseWallsBE.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -61,6 +76,9 @@ namespace EclipseWallsBE.Migrations
         {
             migrationBuilder.DropTable(
                 name: "FavoritosWallpapers");
+
+            migrationBuilder.DropTable(
+                name: "IconsUsers");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");

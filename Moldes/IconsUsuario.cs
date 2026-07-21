@@ -6,6 +6,7 @@ namespace Gen
     public class IconsUser
     {
         [Key]
+        public int IdTable {get;set;}
         public required int UserId {get;set;}
         public required string UrlIcon {get;set;}
     }

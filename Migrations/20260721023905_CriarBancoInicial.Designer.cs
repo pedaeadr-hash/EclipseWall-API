@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EclipseWallsBE.Migrations
 {
     [DbContext(typeof(BankDb))]
-    [Migration("20260703233939_FirstBankCommit")]
-    partial class FirstBankCommit
+    [Migration("20260721023905_CriarBancoInicial")]
+    partial class CriarBancoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,26 @@ namespace EclipseWallsBE.Migrations
                     b.ToTable("FavoritosWallpapers");
                 });
 
+            modelBuilder.Entity("Gen.IconsUser", b =>
+                {
+                    b.Property<int>("IdTable")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdTable"));
+
+                    b.Property<string>("UrlIcon")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("IdTable");
+
+                    b.ToTable("IconsUsers");
+                });
+
             modelBuilder.Entity("Gen.Usuario", b =>
                 {
                     b.Property<int>("Id")
@@ -63,6 +83,10 @@ namespace EclipseWallsBE.Migrations
 
                     b.Property<int>("Role")
                         .HasColumnType("int");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
