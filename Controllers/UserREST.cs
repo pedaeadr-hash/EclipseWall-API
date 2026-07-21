@@ -169,7 +169,14 @@ namespace Controles
                 var email = User.FindFirst(ClaimTypes.Email)?.Value;
                 var role = User.FindFirst(ClaimTypes.Role)?.Value;
                 var nome = User.FindFirst(ClaimTypes.Name)?.Value;
-            return Ok(new {email,role,nome});
+                var GetObj= await bank.Usuarios.FirstOrDefaultAsync(x=>x.Email==email);
+                if (GetObj == null)
+            {
+                return BadRequest("Algo de errado email nao conta no banco de dados");
+                
+            }
+            int id =  GetObj.Id;
+            return Ok(new {email,role,nome,id});
         }
     }
         
