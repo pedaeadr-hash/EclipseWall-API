@@ -15,10 +15,12 @@ namespace IconUser
             Bank = db;
         }
 
-        [HttpGet("test")]
-        public async Task<IActionResult> Teste()
+        [HttpPost("SaveIcon")]
+        public async Task<IActionResult> Teste(IconsUser Iu)
         {
-            return Ok("funcionando");
+            await Bank.AddAsync(Iu);
+            await Bank.SaveChangesAsync();
+            return Ok("Tudo Certo icon salva no banco de dados");
         }
     }
 }
