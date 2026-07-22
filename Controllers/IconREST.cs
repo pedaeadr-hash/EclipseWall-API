@@ -38,22 +38,20 @@ namespace IconUser
                 return Ok("Tudo Certo icon salva no banco de dados");
         }
 
-        [HttpPost]
+        [HttpPost("Effects")]
         public async Task<IActionResult> Effects ([FromBody] IconDto ID)
         {
-            bool Verificacao = await Bank.IconsUsers.AnyAsync(x=>x.UserId==ID.Id);
-            if (!Verificacao)
-            {
-                string UrlF = "https://i.pinimg.com/736x/d7/b9/48/d7b948ff970f7d92ee265072da06fd07.jpg";
-                return Ok (UrlF);
-            }
-            var transfer = await Bank.IconsUsers.FirstOrDefaultAsync(x=>x.UserId==ID.Id);
+            var transfer = await Bank.IconsUsers.FirstOrDefaultAsync(x => x.UserId == ID.Id);
+    
+            
             if (transfer == null)
             {
-                return BadRequest("Null");
+                string UrlF = "https://i.pinimg.com/736x/d7/b9/48/d7b948ff970f7d92ee265072da06fd07.jpg";
+                return Ok(UrlF);
             }
-            string Url = transfer.UrlIcon;
-            return Ok(Url);
-        }
+
+            
+            return Ok(transfer.UrlIcon);
+                }
     }
 }
