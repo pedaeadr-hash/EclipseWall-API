@@ -52,6 +52,6 @@ namespace IconUser
 
             
             return Ok(transfer.UrlIcon);
-                }
+        }
     }
 }
