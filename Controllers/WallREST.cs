@@ -83,8 +83,24 @@ namespace ControllersWall
 
 
 
-
-
+        [HttpPost("UpWallpaper")]
+        [Authorize(Roles ="777")]
+        public async Task<IActionResult> UploadWall (WallpaperDTO wa)
+        {
+            if (string.IsNullOrWhiteSpace(wa.Nome)|| string.IsNullOrWhiteSpace(wa.Url)||string.IsNullOrWhiteSpace(wa.Categoria))
+            {
+                return BadRequest("Campos faltando");
+            }
+            bool VerificarDuplicado = await Bank.Wallpapers.AnyAsync(x=>x.Url==wa.Url);
+            if (VerificarDuplicado)
+            {
+                return BadRequest("Wallpaper já cadastrado");
+            }
+            Wallpaper wall = new Wallpaper {Nome=wa.Nome,Downloads=0,Categoria=wa.Categoria,Url=wa.Url};
+            await Bank.Wallpapers.AddAsync(wall);
+            await Bank.SaveChangesAsync();
+            return Ok();
+        }
 
 
 
