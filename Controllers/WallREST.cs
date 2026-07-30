@@ -114,6 +114,19 @@ namespace ControllersWall
             return Ok(listcategoria);
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> Pesquisar(string pesquisa = "")
+        {
+            var objetos = await Bank.Wallpapers.Where(x=>x.Nome.ToLower().Contains(pesquisa.ToLower())).ToListAsync();
+            if (objetos == null)
+            {
+                string Mensagemerro = "Nenhum wallpaper encontrado.";
+                return BadRequest(Mensagemerro);
+            }
+            return Ok(objetos);
+        }
+
         
         
     }
