@@ -115,7 +115,7 @@ namespace ControllersWall
         }
 
 
-        [HttpGet]
+        [HttpGet("find")]
         public async Task<IActionResult> Pesquisar(string pesquisa = "")
         {
             var objetos = await Bank.Wallpapers.Where(x=>x.Nome.ToLower().Contains(pesquisa.ToLower())).ToListAsync();
