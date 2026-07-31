@@ -126,6 +126,16 @@ namespace ControllersWall
             }
             return Ok(objetos);
         }
+        [HttpGet("downloadslg")]
+        public async Task<IActionResult> Procurar(int slugid=1)
+        {
+            var objeto = await Bank.Wallpapers.FirstOrDefaultAsync(x=>x.Id==slugid);
+            if (objeto ==  null)
+            {
+                return BadRequest("objeto nao encontrado verifique o slug");
+            }
+            return Ok(objeto);
+        }
 
         
         
