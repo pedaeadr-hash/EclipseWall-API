@@ -136,6 +136,17 @@ namespace ControllersWall
             }
             return Ok(objeto);
         }
+        [HttpGet("contardown")]
+        public async Task<IActionResult> Acrecentar([FromQuery]string name="kratos")
+        {   
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("nada feito");
+            }
+            int Add = 1;
+
+            return Ok();
+        }
 
         
         
