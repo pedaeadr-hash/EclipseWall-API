@@ -10,7 +10,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyCors", policy =>
     {
-        policy.WithOrigins("http://localhost:5173") // A porta do seu React
+        policy.WithOrigins("http://localhost:5173","https://eclipse-wall-ybox-five.vercel.app") // A porta do seu React
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
