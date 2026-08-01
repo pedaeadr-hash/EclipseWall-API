@@ -139,13 +139,19 @@ namespace ControllersWall
         [HttpGet("contardown")]
         public async Task<IActionResult> Acrecentar([FromQuery]string name="kratos")
         {   
+            int Add = 1;
             if (string.IsNullOrWhiteSpace(name))
             {
                 return BadRequest("nada feito");
             }
-            int Add = 1;
-
-            return Ok();
+            var Obj = await Bank.Wallpapers.FirstOrDefaultAsync(x=>x.Nome==name);
+            if (Obj == null)
+            {
+                return BadRequest("Objeto nao encontrado");
+            }
+            Obj.Downloads= Obj.Downloads+Add;
+            await Bank.SaveChangesAsync();
+            return Ok("DOWNLOADS ATUALIZADO");
         }
 
         
