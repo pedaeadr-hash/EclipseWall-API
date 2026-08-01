@@ -11,7 +11,9 @@ namespace Gen
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS;Database=EclipseWalls;Trusted_Connection=True;TrustServerCertificate=True;");
+                var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")
+                ?? @"Server=localhost\SQLEXPRESS;Database=EclipseWalls;Trusted_Connection=True;TrustServerCertificate=True;";
+                optionsBuilder.UseSqlServer(connectionString);
         }
     }
 }
