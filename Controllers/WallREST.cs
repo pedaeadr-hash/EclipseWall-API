@@ -96,7 +96,7 @@ namespace ControllersWall
             {
                 return BadRequest("Wallpaper já cadastrado");
             }
-            Wallpaper wall = new Wallpaper {Nome=wa.Nome,Downloads="0",Categoria=wa.Categoria,Url=wa.Url};
+            Wallpaper wall = new Wallpaper {Nome=wa.Nome,Downloads=0,Categoria=wa.Categoria,Url=wa.Url};
             await Bank.Wallpapers.AddAsync(wall);
             await Bank.SaveChangesAsync();
             return Ok();

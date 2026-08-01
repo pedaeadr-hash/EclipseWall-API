@@ -9,7 +9,7 @@ namespace Gen
         public required string Nome {get;set;}
         public required string Url {get;set;}
         public required string Categoria {get;set;}
-        public required string Downloads {get;set;}
+        public required int Downloads {get;set;}
         
     }
 }
