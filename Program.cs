@@ -2,6 +2,8 @@ using Gen;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Key;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,8 +17,9 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
-// Configuração do JWT
-var key = Encoding.ASCII.GetBytes("Gj10ksao924kalju2399merda82ikdii2ne");
+KeyJwtLocal kjl = new KeyJwtLocal();
+string Keyinser = Environment.GetEnvironmentVariable("KEY_JWT") ?? kjl.Key;
+var key = Encoding.ASCII.GetBytes(Keyinser);
 builder.Services.AddAuthentication(options =>
 {
 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
